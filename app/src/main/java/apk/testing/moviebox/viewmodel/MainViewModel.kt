@@ -13,7 +13,7 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(private val movieRepository: MovieRepository) : ViewModel(){
 
     private var _now_play_list = MutableLiveData<PlayList>()
-   // val now_play_list: LiveData<PlayList> = _now_play_list
+  //  val now_play_list: LiveData<PlayList> = _now_play_list
 
     init{
        _now_play_list = MutableLiveData()
@@ -21,11 +21,13 @@ class MainViewModel @Inject constructor(private val movieRepository: MovieReposi
 
     fun loadPlayList() {
            movieRepository.nowPlayListApi(_now_play_list)
-        //Log.d("response_msg",movieRepository.nowPlayListApi(_now_play_list).toString())
+          // Log.d("response_msg",movieRepository.nowPlayListApi(_now_play_list).toString())
     }
 
-    fun getPLayList(): LiveData<PlayList> {
+    fun getPLayList(): MutableLiveData<PlayList> {
+       // Log.d("response_msg", _now_play_list.toString())
         return _now_play_list
+
     }
 
 

@@ -4,26 +4,44 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.ViewModelProvider
+import androidx.recyclerview.widget.LinearLayoutManager
 import apk.testing.moviebox.R
+import apk.testing.moviebox.adapter.PlayListAdapter
+import apk.testing.moviebox.databinding.ActivityMainBinding
 import apk.testing.moviebox.viewmodel.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    lateinit var viewModel: MainViewModel
+    private lateinit var viewModel: MainViewModel
+    private lateinit var activityMainBinding: ActivityMainBinding
+    private lateinit var playListAdapter: PlayListAdapter
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
+        activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(activityMainBinding.root)
 
+        initRecyclerView()
         initViewModel()
 
     }
+
+    fun initRecyclerView(){
+        playListAdapter = PlayListAdapter()
+        activityMainBinding.rView.apply {
+            layoutManager = LinearLayoutManager(applicationContext)
+            adapter = playListAdapter
+        }
+    }
+
     fun initViewModel(){
+        viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.loadPlayList()
         viewModel.getPLayList().observe(this) {
             if (it != null) {
-                Log.d("response_msg",it.toString())
+                playListAdapter.setPlayList(it.results)
+               // Log.d("response_msg",it.toString())
             }else{
                 Log.d("response_msg","null")
             }
