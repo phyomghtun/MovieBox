@@ -3,6 +3,7 @@ package apk.testing.moviebox.network
 import android.util.Log
 import androidx.lifecycle.MutableLiveData
 import apk.testing.moviebox.model.PlayList
+import apk.testing.moviebox.model.movie_details.Details
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -22,6 +23,22 @@ class MovieRepository @Inject constructor(private val retrofitInterface: Retrofi
 
             override fun onFailure(call: Call<PlayList>, t: Throwable) {
                 moviePlayList.postValue(null)
+            }
+
+        })
+    }
+
+    fun getMovieDetails(movieDetails: MutableLiveData<Details>,movie_id: Int){
+        val call: Call<Details> = retrofitInterface.getDetails(movie_id)
+        call.enqueue(object : Callback<Details>{
+            override fun onResponse(call: Call<Details>, response: Response<Details>) {
+                if(response.isSuccessful){
+                    movieDetails.postValue(response.body())
+                }
+            }
+
+            override fun onFailure(call: Call<Details>, t: Throwable) {
+                movieDetails.postValue(null)
             }
 
         })

@@ -27,15 +27,15 @@ class MainActivity : AppCompatActivity() {
 
     }
 
-    fun initRecyclerView(){
-        playListAdapter = PlayListAdapter()
+    private fun initRecyclerView(){
+        playListAdapter = PlayListAdapter(this)
         activityMainBinding.rView.apply {
             layoutManager = LinearLayoutManager(applicationContext)
             adapter = playListAdapter
         }
     }
 
-    fun initViewModel(){
+    private fun initViewModel(){
         viewModel = ViewModelProvider(this)[MainViewModel::class.java]
         viewModel.loadPlayList()
         viewModel.getPLayList().observe(this) {
